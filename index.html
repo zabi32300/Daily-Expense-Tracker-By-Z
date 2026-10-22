@@ -210,7 +210,7 @@ function downloadPDF(){
 
 function render(){
  const todayTotal=data.today.reduce((s,i)=>s+i.price,0);
- document.getElementById('todayTotal').innerText=todayTotal;
+ document.getElementById('todayTotal').innerText=todayTotal;    
  const totalSpent=data.history.reduce((s,h)=>s+h.spent,0)+todayTotal;
  document.getElementById('monthRemaining').innerText=data.monthly?(data.monthly-totalSpent):0;
  const list=document.getElementById('historyList');
