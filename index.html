@@ -3,133 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Expense Tracker By Z - Made By Zohaib</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<title>Daily Expense Tracker By Z</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins','Segoe UI',sans-serif}
-body{background:#FAF6F0;color:#2B2B2B;overflow-x:hidden}
-#welcome{position:fixed;top:0;left:0;width:100%;height:100%;background:#FAF6F0;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;animation:hideW 0.8s ease 3.2s forwards}
-#welcome h1{font-size:2.8rem;color:#2B2B2B;text-align:center;line-height:1.2;font-weight:800;animation:pop 0.8s infinite alternate}
-#welcome p{color:#8A9A7B;margin-top:15px;letter-spacing:3px;font-weight:800;font-size:13px}
-#welcome span{color:#B8B8B8;font-size:11px;margin-top:10px}
-@keyframes pop{from{transform:scale(1)}to{transform:scale(1.05)}}@keyframes hideW{to{transform:translateY(-100%);opacity:0;visibility:hidden}}
-.container{max-width:520px;margin:10px auto;padding:12px}
-.header{background:#FFFFFF;color:#2B2B2B;padding:18px;border-radius:20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.05);border:1px solid #E9E2D0}
-.header h2{font-size:22px;font-weight:800;letter-spacing:-0.5px} .header small{display:block;font-size:10px;font-weight:700;letter-spacing:2px;margin-top:4px;color:#8A9A7B}
-.box{background:#FFFFFF;padding:16px;border-radius:18px;margin-top:12px;box-shadow:0 4px 15px rgba(0,0,0,0.04);border:1px solid #F0EADF}
-.box label{color:#2B2B2B;font-size:13px;font-weight:700;display:block;margin-bottom:8px;letter-spacing:0.2px}
-.box input,.box select{width:100%;padding:12px;border-radius:12px;border:1px solid #E9E2D0;background:#FAF6F0;color:#2B2B2B;outline:none;transition:0.2s}
-.box input:focus{border-color:#8A9A7B}
-.summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.sum-card{background:#FFFFFF;padding:16px;border-radius:18px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.04);border:1px solid #F0EADF}
-.sum-card h3{color:#8A9A7B;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase} .sum-card p{font-size:22px;font-weight:900;margin-top:6px;color:#2B2B2B}
-.btn{width:100%;padding:14px;background:#2B2B2B;color:#FAF6F0;border:none;border-radius:14px;font-weight:800;cursor:pointer;margin-top:10px;letter-spacing:0.5px;transition:0.2s}
-.btn:hover{background:#000}
-.btn-light{background:#8A9A7B;color:white}
-.list-item{background:#FAF6F0;padding:12px 14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;border:1px solid #E9E2D0}
-.badge{position:fixed;top:12px;right:12px;background:#2B2B2B;color:#FAF6F0;font-size:9px;font-weight:800;padding:6px 12px;border-radius:20px;z-index:100;letter-spacing:1px}
-.footer{text-align:center;margin-top:22px;color:#B8B8B8;font-size:11px;padding:16px}
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #FAF6F0;
+    margin: 0;
+    padding: 20px;
+    color: #2B2B2B;
+  }
+  .container {
+    max-width: 420px;
+    margin: auto;
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid #EAEAEA;
+    outline: none;
+    background: #FAF6F0;
+  }
+  button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: #2B2B2B;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: #000; }
+  .total-box {
+    margin-top: 20px;
+    background: #8A9A7B;
+    color: white;
+    padding: 15px;
+    border-radius: 14px;
+    text-align: center;
+  }
+  .total-box h2 { margin: 0; font-size: 16px; font-weight: 400; }
+  .total-box p { margin: 5px 0 0; font-size: 28px; font-weight: 600; }
+  .history {
+    margin-top: 25px;
+  }
+  .history h3 {
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #F5F5F5;
+    font-size: 14px;
+  }
+  .history-item span:last-child { font-weight: 600; }
+  .delete-btn {
+    background: transparent;
+    color: #ff6b6b;
+    width: auto;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+  .clear-btn {
+    margin-top: 15px;
+    background: #FAF6F0;
+    color: #2B2B2B;
+    border: 1px solid #EAEAEA;
+  }
 </style>
 </head>
 <body>
-<div class="badge">MADE BY ZOHAIB</div>
-<div id="welcome">
-<h1>Daily Expense<br>Tracker By Z</h1>
-<p>MADE BY ZOHAIB</p>
-<span>Aesthetic Version Loading...</span>
-</div>
 
 <div class="container">
-<div class="header">
-<h2>Daily Expense Tracker</h2>
-<small>MADE BY ZOHAIB - AESTHETIC EDITION</small>
-<p id="dateShow" style="color:#8A9A7B;font-weight:600;margin-top:8px;font-size:12px"></p>
-</div>
+  <h1>Daily Expense Tracker</h1>
+  
+  <div class="input-group">
+    <input type="text" id="itemName" placeholder="کس چیز پر خرچ کیا؟">
+    <input type="number" id="itemPrice" placeholder="کتنے روپے؟">
+  </div>
+  <button onclick="addExpense()">Add Expense</button>
 
-<div class="box">
-<label>Total Monthly Budget</label>
-<input type="number" id="totalBudget" placeholder="e.g. 50000" oninput="saveBudget()">
-</div>
+  <div class="total-box">
+    <h2>آج کا کل خرچہ</h2>
+    <p>Rs. <span id="todayTotal">0</span></p>
+  </div>
 
-<div class="summary">
-<div class="sum-card"><h3>Total Spent</h3><p id="totalSpent">Rs 0</p></div>
-<div class="sum-card"><h3>Balance Left</h3><p id="totalLeft" style="color:#8A9A7B">Rs 0</p></div>
-</div>
-
-<div class="box">
-<label>Add Today's Expense</label>
-<input type="text" id="itemName" placeholder="What did you spend on?">
-<div style="display:flex;gap:8px;margin-top:8px">
-<input type="number" id="itemAmount" placeholder="Amount Rs">
-<select id="itemCat" style="max-width:110px"><option>Food</option><option>Travel</option><option>Home</option><option>Other</option></select>
-</div>
-<button class="btn" onclick="addKharcha()">+ Add Expense</button>
-</div>
-
-<div class="box">
-<label>Expense History</label>
-<div id="kharchaList" style="margin-top:10px;color:#999;font-size:14px">No expenses yet</div>
-<div style="display:flex;gap:8px;margin-top:14px">
-<button class="btn btn-light" onclick="downloadPDF()">PDF Download</button>
-<button class="btn" style="background:transparent;border:1.5px solid #E9E2D0;color:#B8B8B8" onclick="clearAll()">Clear</button>
-</div>
-</div>
-
-<div class="footer">Crafted with love by <b style="color:#2B2B2B">Zohaib</b><br>Daily Expense Tracker By Z</div>
+  <div class="history">
+    <h3>History</h3>
+    <div id="historyList"></div>
+    <button class="clear-btn" onclick="clearAll()">Clear All History</button>
+  </div>
 </div>
 
 <script>
-document.getElementById('dateShow').innerText = new Date().toLocaleDateString('en-PK', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-let budget = localStorage.getItem('rozanaBudget') || 0;
-let list = JSON.parse(localStorage.getItem('rozanaList') || '[]');
-document.getElementById('totalBudget').value = budget;
-updateUI();
-function saveBudget(){budget=document.getElementById('totalBudget').value;localStorage.setItem('rozanaBudget',budget);updateUI();}
-function addKharcha(){
-let name=document.getElementById('itemName').value;
-let amount=parseFloat(document.getElementById('itemAmount').value);
-let cat=document.getElementById('itemCat').value;
-if(!name||!amount) return alert('Please enter name and amount');
-let entry={id:Date.now(),name:name,amount:amount,cat:cat,date:new Date().toLocaleDateString()};
-list.unshift(entry);localStorage.setItem('rozanaList',JSON.stringify(list));
-document.getElementById('itemName').value='';document.getElementById('itemAmount').value='';updateUI();
-}
-function updateUI(){
-let spent=list.reduce((s,i)=>s+i.amount,0);let left=(parseFloat(budget)||0)-spent;
-document.getElementById('totalSpent').innerText='Rs '+spent;
-document.getElementById('totalLeft').innerText='Rs '+left;
-let html='';if(list.length==0) html='No expenses yet';
-else list.forEach(item=>{html+=`<div class="list-item"><div><b>${item.name}</b><br><small style="color:#8A9A7B">${item.cat} - ${item.date}</small></div><div style="text-align:right"><b>Rs ${item.amount}</b><br><small onclick="del(${item.id})" style="color:#C9A0A0;cursor:pointer">Delete</small></div></div>`;});
-document.getElementById('kharchaList').innerHTML=html;
-}
-function del(id){list=list.filter(i=>i.id!=id);localStorage.setItem('rozanaList',JSON.stringify(list));updateUI();}
-function clearAll(){if(confirm('Clear all data?')){list=[];localStorage.removeItem('rozanaList');updateUI();}}
-function downloadPDF(){
-const {jsPDF}=window.jspdf; let doc=new jsPDF();
-doc.setFillColor(43,43,43); doc.rect(0,0,210,32,'F');
-doc.setTextColor(250,246,240); doc.setFontSize(18); doc.setFont("helvetica","bold");
-doc.text("Daily Expense Tracker By Z",12,14);
-doc.setFontSize(10); doc.setTextColor(138,154,123); doc.text("MADE BY ZOHAIB - AESTHETIC EDITION",12,22);
-doc.setTextColor(250,246,240); doc.setFontSize(8); doc.setFont("helvetica","normal");
-doc.text("zabi32300.github.io/Daily-Expense-Tracker-By-Z",12,28);
-doc.setTextColor(43,43,43); let y=48;
-doc.setFontSize(12); doc.setFont("helvetica","bold");
-doc.text(`Total Budget: Rs ${budget||0}`,10,y); y+=8;
-let spent=list.reduce((s,i)=>s+i.amount,0); let left=(parseFloat(budget)||0)-spent;
-doc.text(`Total Spent: Rs ${spent}`,10,y); y+=8;
-doc.text(`Balance Left: Rs ${left}`,10,y); y+=12;
-doc.setFont("helvetica","normal"); doc.setFontSize(10);
-doc.text(`Date: ${new Date().toLocaleString()}`,10,y); y+=12;
-doc.setFont("helvetica","bold"); doc.text("Expense Details:",10,y); y+=8;
-doc.setFont("helvetica","normal");
-list.forEach(item=>{
-if(y>270){doc.addPage(); y=20;}
-doc.text(`- ${item.name} (${item.cat}) : Rs ${item.amount} - ${item.date}`,12,y); y+=7;
-});
-doc.setFontSize(9); doc.setTextColor(138,154,123);
-doc.text("© 2026 Made By Zohaib | Aesthetic Edition",10,290);
-doc.save("Daily-Expense-Tracker-Aesthetic-By-Zohaib.pdf");
-}
+  let expenses = JSON.parse(localStorage.getItem('expensesByZ')) || [];
+
+  function addExpense() {
+    const name = document.getElementById('itemName').value;
+    const price = parseFloat(document.getElementById('itemPrice').value);
+    if (!name || !price) return alert('نام اور قیمت دونوں لکھو');
+
+    const today = new Date().toLocaleDateString('en-GB');
+    expenses.push({ name, price, date: today, id: Date.now() });
+    localStorage.setItem('expensesByZ', JSON.stringify(expenses));
+    
+    document.getElementById('itemName').value = '';
+    document.getElementById('itemPrice').value = '';
+    render();
+  }
+
+  function render() {
+    const historyList = document.getElementById('historyList');
+    const today = new Date().toLocaleDateString('en-GB');
+    let todayTotal = 0;
+    historyList.innerHTML = '';
+
+    expenses.slice().reverse().forEach(exp => {
+      if (exp.date === today) todayTotal += exp.price;
+      historyList.innerHTML += `
+        <div class="history-item">
+          <span>${exp.date} - ${exp.name}</span>
+          <span>Rs. ${exp.price} <button class="delete-btn" onclick="deleteItem(${exp.id})">x</button></span>
+        </div>`;
+    });
+    document.getElementById('todayTotal').innerText = todayTotal;
+  }
+
+  function deleteItem(id) {
+    expenses = expenses.filter(e => e.id !== id);
+    localStorage.setItem('expensesByZ', JSON.stringify(expenses));
+    render();
+  }
+
+  function clearAll() {
+    if(confirm('کیا ساری ہسٹری ڈیلیٹ کرنی ہے؟')) {
+      expenses = [];
+      localStorage.removeItem('expensesByZ');
+      render();
+    }
+  }
+  render();
 </script>
+
 </body>
 </html>
