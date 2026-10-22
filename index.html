@@ -218,7 +218,7 @@ function render(){
  data.history.slice().reverse().forEach(h=>{
    list.innerHTML+=`<div class="history-item"><div><b><span class="dot"></span>${h.date}</b><br><span style="color:#888; font-size:11px;">${h.items.map(i=>i.name).join(', ')}</span></div><div style="text-align:right"><b>Rs.${h.spent}</b><br><span style="color:#8A9A7B; font-size:11px; font-weight:600;">باقی Rs.${h.remaining}</span></div></div>`;
  });
-}
+}  
 render();
 </script>
 </body>
