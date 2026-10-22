@@ -3,166 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Expense Tracker By Z</title>
+<title>Expense Tracker By Z - Aesthetic Final</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: #FAF6F0;
-    margin: 0;
-    padding: 20px;
-    color: #2B2B2B;
-  }
-  .container {
-    max-width: 420px;
-    margin: auto;
-    background: #FFFFFF;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-  }
-  h1 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
-  .input-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-  input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1.5px solid #EAEAEA;
-    outline: none;
-    background: #FAF6F0;
-  }
-  button {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    background: #2B2B2B;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  button:hover { background: #000; }
-  .total-box {
-    margin-top: 20px;
-    background: #8A9A7B;
-    color: white;
-    padding: 15px;
-    border-radius: 14px;
-    text-align: center;
-  }
-  .total-box h2 { margin: 0; font-size: 16px; font-weight: 400; }
-  .total-box p { margin: 5px 0 0; font-size: 28px; font-weight: 600; }
-  .history {
-    margin-top: 25px;
-  }
-  .history h3 {
-    font-size: 16px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-  }
-  .history-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #F5F5F5;
-    font-size: 14px;
-  }
-  .history-item span:last-child { font-weight: 600; }
-  .delete-btn {
-    background: transparent;
-    color: #ff6b6b;
-    width: auto;
-    padding: 0 8px;
-    font-size: 12px;
-  }
-  .clear-btn {
-    margin-top: 15px;
-    background: #FAF6F0;
-    color: #2B2B2B;
-    border: 1px solid #EAEAEA;
-  }
+:root{
+  --bg:#FAF6F0;
+  --card:#FFFFFF;
+  --black:#2B2B2B;
+  --sage:#8A9A7B;
+  --border:#EDE8E0;
+  --text-light:#9A9A9A;
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  margin:0; padding:0;
+  color:var(--black);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Welcome Screen - Aesthetic */
+#welcome-screen{
+ position:fixed; top:0; left:0; width:100%; height:100%;
+ background:var(--black); z-index:9999; display:flex;
+ flex-direction:column; justify-content:center; align-items:center;
+ color:white; animation:fadeOut 1s ease 2.8s forwards;
+}
+#welcome-screen .logo{
+  width:60px; height:60px; background:var(--sage);
+  border-radius:18px; display:flex; justify-content:center; align-items:center;
+  font-family:'Playfair Display'; font-size:28px; margin-bottom:18px;
+  animation: popIn 0.8s ease;
+}
+#welcome-screen h1{ font-family:'Playfair Display'; font-size:34px; margin:0; animation: slideUp 0.8s ease 0.2s both; }
+#welcome-screen p{ color:var(--sage); margin-top:8px; letter-spacing:4px; font-size:12px; font-weight:500; animation: slideUp 0.8s ease 0.4s both; }
+@keyframes slideUp { from{ transform:translateY(25px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
+@keyframes popIn { from{ transform:scale(0.8); opacity:0 } to{ transform:scale(1); opacity:1 } }
+@keyframes fadeOut { to{ opacity:0; visibility:hidden } }
+
+/* Main App */
+.container{
+  max-width:440px; margin:0 auto;
+  padding:24px 18px 30px;
+}
+.header{
+  text-align:center; margin:20px 0 28px;
+}
+.header h1{
+  font-family:'Playfair Display';
+  font-size:26px; margin:0;
+}
+.header span{
+  font-size:11px; letter-spacing:3px; color:var(--sage);
+  font-weight:600; text-transform:uppercase;
+}
+.card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 4px 18px rgba(43,43,43,0.03);
+}
+label{
+  font-size:10px; color:var(--text-light);
+  text-transform:uppercase; letter-spacing:1.5px; font-weight:600;
+}
+input{
+  width:100%; padding:13px 14px; border-radius:12px;
+  border:1.5px solid var(--border); background:var(--bg);
+  outline:none; box-sizing:border-box; margin-top:6px;
+  font-family:'Poppins'; font-size:14px; font-weight:500;
+  transition:0.2s;
+}
+input:focus{ border-color:var(--sage); background:#fff; }
+.row{display:flex; gap:12px}
+.row .card{flex:1; margin-bottom:0;}
+
+.btn{
+  width:100%; padding:15px; border:none; border-radius:14px;
+  font-weight:600; cursor:pointer; font-family:'Poppins';
+  font-size:14px; transition:0.15s;
+}
+.btn-black{background:var(--black); color:#fff; box-shadow:0 8px 20px rgba(43,43,43,0.15);}
+.btn-black:hover{background:#1a1a1a;}
+.btn-sage{background:var(--sage); color:#fff; margin-top:14px;}
+.btn-outline{background:var(--card); color:var(--black); border:1.8px solid var(--black); margin-top:12px; display:flex; justify-content:center; align-items:center; gap:8px;}
+.btn:active{transform:scale(0.97)}
+
+.total-box{
+  background:var(--black); color:#fff; padding:18px 20px;
+  border-radius:20px; display:flex; justify-content:space-between;
+  margin-top:16px; position:relative; overflow:hidden;
+}
+.total-box::after{
+  content:''; position:absolute; width:120px; height:120px;
+  background:var(--sage); opacity:0.15; border-radius:50%;
+  right:-30px; top:-30px;
+}
+.total-box p{margin:4px 0 0; font-size:20px; font-weight:700}
+.total-box label{color:#A0A0A0}
+
+.history{margin-top:28px}
+.history h3{
+  font-family:'Playfair Display'; font-size:16px;
+  border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:14px;
+}
+.history-item{
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:16px; padding:12px 14px; margin-bottom:10px;
+  display:flex; justify-content:space-between; font-size:13px;
+  animation: slideUp 0.3s ease;
+}
+.history-item b{font-weight:600}
+.dot{width:8px; height:8px; background:var(--sage); border-radius:50%; display:inline-block; margin-right:6px;}
+.empty{font-size:12px; color:var(--text-light); text-align:center; padding:20px; background:var(--card); border-radius:16px; border:1.5px dashed var(--border);}
 </style>
 </head>
 <body>
 
+<div id="welcome-screen">
+  <div class="logo">Z</div>
+  <h1>Welcome</h1>
+  <p>EXPENSE TRACKER BY Z</p>
+</div>
+
 <div class="container">
-  <h1>Daily Expense Tracker</h1>
-  
-  <div class="input-group">
-    <input type="text" id="itemName" placeholder="کس چیز پر خرچ کیا؟">
-    <input type="number" id="itemPrice" placeholder="کتنے روپے؟">
+  <div class="header">
+    <h1>Expense Tracker</h1>
+    <span>By Z • Aesthetic Edition</span>
   </div>
-  <button onclick="addExpense()">Add Expense</button>
+
+  <div class="card">
+    <label>ماہانہ بجٹ — Monthly Budget</label>
+    <input type="number" id="monthlyBudget" placeholder="مثلاً 30000" oninput="saveMonthly()">
+  </div>
+
+  <div class="row">
+    <div class="card"><label>چیز</label><input type="text" id="itemName" placeholder="چائے، پیٹرول"></div>
+    <div class="card"><label>قیمت</label><input type="number" id="itemPrice" placeholder="500"></div>
+  </div>
+
+  <button class="btn btn-black" onclick="addExpense()">+ Add Expense</button>
 
   <div class="total-box">
-    <h2>آج کا کل خرچہ</h2>
-    <p>Rs. <span id="todayTotal">0</span></p>
+    <div><label>آج کا خرچہ</label><p>Rs. <span id="todayTotal">0</span></p></div>
+    <div style="text-align:right"><label>باقی</label><p>Rs. <span id="monthRemaining">0</span></p></div>
   </div>
+
+  <button class="btn btn-sage" onclick="nextDay()">Next Day → تاریخ میں محفوظ کریں</button>
+  <button class="btn btn-outline" onclick="downloadPDF()">📄 Download Aesthetic PDF</button>
 
   <div class="history">
     <h3>History</h3>
     <div id="historyList"></div>
-    <button class="clear-btn" onclick="clearAll()">Clear All History</button>
+    <button class="btn" style="background:transparent; color:var(--text-light); font-size:12px; margin-top:8px;" onclick="clearAll()">Clear All History</button>
   </div>
 </div>
 
 <script>
-  let expenses = JSON.parse(localStorage.getItem('expensesByZ')) || [];
+let data = JSON.parse(localStorage.getItem('zabi_aesthetic_final')) || { monthly:0, today:[], history:[] };
+document.getElementById('monthlyBudget').value = data.monthly || '';
 
-  function addExpense() {
-    const name = document.getElementById('itemName').value;
-    const price = parseFloat(document.getElementById('itemPrice').value);
-    if (!name || !price) return alert('نام اور قیمت دونوں لکھو');
+function saveMonthly(){ data.monthly = parseFloat(document.getElementById('monthlyBudget').value) || 0; localStorage.setItem('zabi_aesthetic_final', JSON.stringify(data)); render(); }
+function addExpense(){ const name=document.getElementById('itemName').value.trim(); const price=parseFloat(document.getElementById('itemPrice').value); if(!name||!price) return alert('نام اور قیمت لکھو'); data.today.push({name,price}); save(); document.getElementById('itemName').value=''; document.getElementById('itemPrice').value=''; }
+function nextDay(){ if(data.today.length===0) return alert('آج کا کوئی خرچہ نہیں'); const todayTotal=data.today.reduce((s,i)=>s+i.price,0); const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); const totalSpentBefore=data.history.reduce((s,h)=>s+h.spent,0); const remaining=data.monthly-totalSpentBefore-todayTotal; data.history.push({date,spent:todayTotal,remaining:remaining,items:[...data.today]}); data.today=[]; save(); }
+function save(){ localStorage.setItem('zabi_aesthetic_final', JSON.stringify(data)); render(); }
+function clearAll(){ if(confirm('ساری ہسٹری ڈیلیٹ کرنی ہے؟')){ data={monthly:data.monthly,today:[],history:[]}; localStorage.setItem('zabi_aesthetic_final', JSON.stringify(data)); render(); } }
 
-    const today = new Date().toLocaleDateString('en-GB');
-    expenses.push({ name, price, date: today, id: Date.now() });
-    localStorage.setItem('expensesByZ', JSON.stringify(expenses));
-    
-    document.getElementById('itemName').value = '';
-    document.getElementById('itemPrice').value = '';
-    render();
-  }
+function downloadPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFillColor(43,43,43); doc.rect(0,0,210,36,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(20); doc.setFont("helvetica","bold");
+  doc.text("Expense Tracker By Z", 14, 20);
+  doc.setFontSize(9); doc.setTextColor(138,154,123); doc.setFont("helvetica","normal");
+  doc.text("AESTHETIC EDITION - MONTHLY REPORT", 14, 28);
 
-  function render() {
-    const historyList = document.getElementById('historyList');
-    const today = new Date().toLocaleDateString('en-GB');
-    let todayTotal = 0;
-    historyList.innerHTML = '';
+  doc.setTextColor(40,40,40); doc.setFontSize(11); doc.setFont("helvetica","bold");
+  let y=52;
+  doc.text(`Monthly Budget: Rs. ${data.monthly || 0}`, 14, y); y+=8;
+  const todayTotal=data.today.reduce((s,i)=>s+i.price,0);
+  const totalSpent=data.history.reduce((s,h)=>s+h.spent,0)+todayTotal;
+  doc.text(`Total Spent: Rs. ${totalSpent}`, 14, y); y+=8;
+  doc.text(`Remaining: Rs. ${data.monthly ? data.monthly - totalSpent : 0}`, 14, y); y+=14;
 
-    expenses.slice().reverse().forEach(exp => {
-      if (exp.date === today) todayTotal += exp.price;
-      historyList.innerHTML += `
-        <div class="history-item">
-          <span>${exp.date} - ${exp.name}</span>
-          <span>Rs. ${exp.price} <button class="delete-btn" onclick="deleteItem(${exp.id})">x</button></span>
-        </div>`;
+  doc.setFontSize(13); doc.text("Daily History:", 14, y); y+=10; doc.setFontSize(10); doc.setFont("helvetica","normal");
+  if(data.history.length===0){ doc.text("No history yet.", 14, y); }
+  else {
+    data.history.forEach((h,i)=>{
+      if(y>270){ doc.addPage(); y=20; }
+      doc.setFillColor(250,246,240); doc.rect(14, y-6, 182, 12, 'F');
+      doc.setFont("helvetica","bold"); doc.text(`${i+1}. ${h.date} - Spent: Rs.${h.spent} - Remaining: Rs.${h.remaining}`, 16, y);
+      y+=7; doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(120,120,120);
+      doc.text(`   Items: ${h.items.map(it=>`${it.name} (${it.price})`).join(', ')}`, 16, y);
+      doc.setFontSize(10); doc.setTextColor(40,40,40); y+=10;
     });
-    document.getElementById('todayTotal').innerText = todayTotal;
   }
+  doc.setFontSize(7); doc.setTextColor(160,160,160);
+  doc.text(`Generated on ${new Date().toLocaleDateString()} - Expense Tracker By Z`, 14, 285);
+  doc.save(`Expense-Report-Aesthetic-${new Date().toLocaleDateString()}.pdf`);
+}
 
-  function deleteItem(id) {
-    expenses = expenses.filter(e => e.id !== id);
-    localStorage.setItem('expensesByZ', JSON.stringify(expenses));
-    render();
-  }
-
-  function clearAll() {
-    if(confirm('کیا ساری ہسٹری ڈیلیٹ کرنی ہے؟')) {
-      expenses = [];
-      localStorage.removeItem('expensesByZ');
-      render();
-    }
-  }
-  render();
+function render(){
+ const todayTotal=data.today.reduce((s,i)=>s+i.price,0);
+ document.getElementById('todayTotal').innerText=todayTotal;
+ const totalSpent=data.history.reduce((s,h)=>s+h.spent,0)+todayTotal;
+ document.getElementById('monthRemaining').innerText=data.monthly?(data.monthly-totalSpent):0;
+ const list=document.getElementById('historyList');
+ list.innerHTML='';
+ if(data.history.length===0){ list.innerHTML='<div class="empty">ابھی کوئی ہسٹری نہیں — آج کا خرچہ ایڈ کرو</div>'; return; }
+ data.history.slice().reverse().forEach(h=>{
+   list.innerHTML+=`<div class="history-item"><div><b><span class="dot"></span>${h.date}</b><br><span style="color:#888; font-size:11px;">${h.items.map(i=>i.name).join(', ')}</span></div><div style="text-align:right"><b>Rs.${h.spent}</b><br><span style="color:#8A9A7B; font-size:11px; font-weight:600;">باقی Rs.${h.remaining}</span></div></div>`;
+ });
+}
+render();
 </script>
-
 </body>
 </html>
