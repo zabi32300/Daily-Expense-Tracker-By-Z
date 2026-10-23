@@ -9,8 +9,14 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 body{background:#FAF6F0;color:#2B2B2B}
+#welcome{position:fixed;inset:0;background:#FAF6F0;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;animation:hideW 0.8s ease 3s forwards}
+#welcome h1{font-size:2.8rem;text-align:center;line-height:1.2;font-weight:800}
+#welcome p{color:#8A9A7B;margin-top:15px;letter-spacing:3px;font-weight:800;font-size:13px}
+#welcome .load{margin-top:20px;width:100px;height:3px;background:#E9E2D0;border-radius:10px;overflow:hidden}
+#welcome .load div{height:100%;width:0%;background:#8A9A7B;animation:load 2.5s ease forwards}
+@keyframes load{to{width:100%}} @keyframes hideW{to{transform:translateY(-100%);opacity:0;visibility:hidden}}
 .container{max-width:520px;margin:10px auto;padding:12px}
-.header{background:#FFFFFF;padding:18px;border-radius:20px;text-align:center;border:1px solid #E9E2D0}
+.header{background:#FFF;padding:18px;border-radius:20px;text-align:center;border:1px solid #E9E2D0}
 .box{background:#FFF;padding:16px;border-radius:18px;margin-top:12px;border:1px solid #F0EADF}
 .box input,.box select{width:100%;padding:12px;border-radius:12px;border:1px solid #E9E2D0;background:#FAF6F0;outline:none}
 .summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
@@ -22,16 +28,20 @@ body{background:#FAF6F0;color:#2B2B2B}
 .day-group{background:#FAF6F0;padding:12px;border-radius:12px;margin-top:14px;border:1px dashed #E9E2D0;display:flex;justify-content:space-between}
 .day-group.closed{background:#E9E2D0;border-style:solid}
 .list-item{background:#FFF;padding:10px 12px;border-radius:12px;display:flex;justify-content:space-between;margin-top:8px;border:1px solid #F0EADF}
+.badge{position:fixed;top:12px;right:12px;background:#2B2B2B;color:#FAF6F0;font-size:10px;padding:8px 14px;border-radius:20px;z-index:10000;font-weight:800;letter-spacing:1px}
 </style>
 </head>
 <body>
+<div class="badge">MADE BY ZOHAIB</div>
+<div id="welcome"><h1>Daily Expense<br>Tracker By Z</h1><p>MADE BY ZOHAIB</p><div class="load"><div></div></div></div>
+
 <div class="container">
-<div class="header"><h2>Daily Expense Tracker By Z</h2><small style="color:#8A9A7B">MADE BY ZOHAIB - FINAL FIXED</small><p id="dateShow" style="color:#8A9A7B;margin-top:8px;font-size:12px"></p></div>
+<div class="header"><h2>Daily Expense Tracker</h2><small style="color:#8A9A7B;letter-spacing:2px;font-size:10px;font-weight:700">MADE BY ZOHAIB - FINAL</small><p id="dateShow" style="color:#8A9A7B;margin-top:8px;font-size:12px"></p></div>
 <div class="active-day" id="activeDayLabel">Active Day: Day 1</div>
 <div class="box"><label>Total Monthly Budget</label><input type="number" id="totalBudget" placeholder="50000" oninput="saveBudget()"></div>
 <div class="summary"><div class="sum-card"><h3>Today Spent</h3><p id="todaySpent">Rs 0</p></div><div class="sum-card"><h3>Total Spent</h3><p id="totalSpent">Rs 0</p></div><div class="sum-card"><h3>Balance Left</h3><p id="totalLeft">Rs 0</p></div></div>
 <div class="box"><label>Add Expense for <span id="addForDay">Day 1</span></label><input type="text" id="itemName" placeholder="What did you spend on?"><div style="display:flex;gap:8px;margin-top:8px"><input type="number" id="itemAmount" placeholder="Amount Rs"><select id="itemCat"><option>Food</option><option>Travel</option><option>Home</option><option>Other</option></select></div><button class="btn" onclick="addKharcha()">+ Add Expense</button><button class="btn btn-complete" onclick="completeDay()">✅ Complete Day & Start Next Day</button></div>
-<div class="box"><label>Day by Day History</label><div id="kharchaList">No expenses yet</div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn" style="background:#8A9A7B" onclick="downloadPDF()">PDF Download</button><button class="btn" style="background:transparent;border:1.5px solid #E9E2D0;color:#B8B8B8" onclick="clearAll()">Clear All (Reset Day 1)</button></div></div>
+<div class="box"><label>Day by Day History</label><div id="kharchaList">No expenses yet</div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn" style="background:#8A9A7B" onclick="downloadPDF()">PDF Download</button><button class="btn" style="background:transparent;border:1.5px solid #E9E2D0;color:#B8B8B8" onclick="clearAll()">Clear All</button></div></div>
 </div>
 <script>
 document.getElementById('dateShow').innerText = new Date().toLocaleDateString('en-PK',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -41,57 +51,13 @@ let closedDays = JSON.parse(localStorage.getItem('closedDays')||'[]');
 let activeDayNum = parseInt(localStorage.getItem('activeDayNum')||'1');
 document.getElementById('totalBudget').value = budget||'';
 function saveBudget(){budget=parseFloat(document.getElementById('totalBudget').value)||0;localStorage.setItem('rozanaBudget',budget);updateUI();}
-function addKharcha(){
-let name=document.getElementById('itemName').value.trim(); let amount=parseFloat(document.getElementById('itemAmount').value); let cat=document.getElementById('itemCat').value;
-if(!name||!amount) return alert('Name and amount likho');
-let entry={id:Date.now(),name:name,amount:amount,cat:cat,dayNum:activeDayNum, date:`Day ${activeDayNum}`};
-list.unshift(entry); localStorage.setItem('rozanaList',JSON.stringify(list));
-document.getElementById('itemName').value=''; document.getElementById('itemAmount').value=''; updateUI();
-}
-function completeDay(){
-let todayItems = list.filter(i=>i.dayNum===activeDayNum);
-if(todayItems.length===0) return alert('Pehle kharcha add karo!');
-let todayTotal = todayItems.reduce((s,i)=>s+Number(i.amount),0);
-let totalSpent = list.reduce((s,i)=>s+Number(i.amount),0);
-let balanceLeft = budget - totalSpent;
-if(closedDays.find(d=>d.dayNum===activeDayNum)) return alert('Ye din already closed hai');
-if(!confirm(`Day ${activeDayNum} close karna hai?\nTotal: Rs ${todayTotal}\nBalance Bacha: Rs ${balanceLeft}`)) return;
-closedDays.unshift({dayNum:activeDayNum, date:`Day ${activeDayNum} - ${new Date().toLocaleDateString('en-PK')}`, total:todayTotal, balanceLeft:balanceLeft});
-localStorage.setItem('closedDays',JSON.stringify(closedDays));
-activeDayNum++; localStorage.setItem('activeDayNum',activeDayNum);
-updateUI();
-}
-function updateUI(){
-let todayItems = list.filter(i=>i.dayNum===activeDayNum);
-let todayTotal = todayItems.reduce((s,i)=>s+Number(i.amount),0);
-let totalSpent = list.reduce((s,i)=>s+Number(i.amount),0);
-let left = budget - totalSpent;
-document.getElementById('todaySpent').innerText='Rs '+todayTotal;
-document.getElementById('totalSpent').innerText='Rs '+totalSpent;
-document.getElementById('totalLeft').innerText='Rs '+left;
-document.getElementById('activeDayLabel').innerText=`Active Day: Day ${activeDayNum} - Naya kharcha yahan jayega`;
-document.getElementById('addForDay').innerText=`Day ${activeDayNum}`;
-let grouped={}; list.forEach(it=>{let k=`Day ${it.dayNum}`; if(!grouped[k]) grouped[k]=[]; grouped[k].push(it);});
-let html=''; if(list.length==0 && closedDays.length==0) html='No expenses yet';
-else{
-closedDays.forEach(cd=>{
-html+=`<div class="day-group closed"><div><b>📅 ${cd.date} ✅ CLOSED</b><br><small>Total Kharcha: Rs ${cd.total} | Balance Bacha: Rs ${cd.balanceLeft}</small></div></div>`;
-(grouped[`Day ${cd.dayNum}`]||[]).forEach(it=>{html+=`<div class="list-item"><div><b>${it.name}</b><br><small>${it.cat}</small></div><div><b>Rs ${it.amount}</b></div></div>`;});
-delete grouped[`Day ${cd.dayNum}`];
-});
-Object.keys(grouped).sort((a,b)=>parseInt(b.split(' ')[1])-parseInt(a.split(' ')[1])).forEach(k=>{
-let tot=grouped[k].reduce((s,i)=>s+Number(i.amount),0);
-let isActive = parseInt(k.split(' ')[1])===activeDayNum;
-html+=`<div class="day-group" style="${isActive?'background:#8A9A7B;color:white':''}"><div><b>${k} ${isActive?'(ACTIVE)':''}</b><br><small>Day Total: Rs ${tot}</small></div><span>Rs ${tot}</span></div>`;
-grouped[k].forEach(it=>{html+=`<div class="list-item"><div><b>${it.name}</b><br><small>${it.cat}</small></div><div><b>Rs ${it.amount}</b> <small onclick="del(${it.id})" style="color:#C9A0A0;cursor:pointer">Delete</small></div></div>`;});
-});
-}
-document.getElementById('kharchaList').innerHTML=html;
-}
+function addKharcha(){let name=document.getElementById('itemName').value.trim(); let amount=parseFloat(document.getElementById('itemAmount').value); let cat=document.getElementById('itemCat').value; if(!name||!amount) return alert('Name and amount likho'); let entry={id:Date.now(),name:name,amount:amount,cat:cat,dayNum:activeDayNum}; list.unshift(entry); localStorage.setItem('rozanaList',JSON.stringify(list)); document.getElementById('itemName').value=''; document.getElementById('itemAmount').value=''; updateUI();}
+function completeDay(){let todayItems = list.filter(i=>i.dayNum===activeDayNum); if(todayItems.length===0) return alert('Pehle kharcha add karo!'); let todayTotal = todayItems.reduce((s,i)=>s+Number(i.amount),0); let totalSpent = list.reduce((s,i)=>s+Number(i.amount),0); let balanceLeft = budget - totalSpent; if(closedDays.find(d=>d.dayNum===activeDayNum)) return alert('Already closed'); if(!confirm(`Day ${activeDayNum} close?\nTotal: Rs ${todayTotal}\nBalance: Rs ${balanceLeft}`)) return; closedDays.unshift({dayNum:activeDayNum, date:`Day ${activeDayNum} - ${new Date().toLocaleDateString('en-PK')}`, total:todayTotal, balanceLeft:balanceLeft}); localStorage.setItem('closedDays',JSON.stringify(closedDays)); activeDayNum++; localStorage.setItem('activeDayNum',activeDayNum); updateUI();}
+function updateUI(){let todayItems = list.filter(i=>i.dayNum===activeDayNum); let todayTotal = todayItems.reduce((s,i)=>s+Number(i.amount),0); let totalSpent = list.reduce((s,i)=>s+Number(i.amount),0); let left = budget - totalSpent; document.getElementById('todaySpent').innerText='Rs '+todayTotal; document.getElementById('totalSpent').innerText='Rs '+totalSpent; document.getElementById('totalLeft').innerText='Rs '+left; document.getElementById('activeDayLabel').innerText=`Active Day: Day ${activeDayNum}`; document.getElementById('addForDay').innerText=`Day ${activeDayNum}`; let grouped={}; list.forEach(it=>{let k=`Day ${it.dayNum}`; if(!grouped[k]) grouped[k]=[]; grouped[k].push(it);}); let html=''; if(list.length==0 && closedDays.length==0) html='No expenses yet'; else{closedDays.forEach(cd=>{html+=`<div class="day-group closed"><div><b>📅 ${cd.date} ✅ CLOSED</b><br><small>Total: Rs ${cd.total} | Balance Bacha: Rs ${cd.balanceLeft}</small></div></div>`;(grouped[`Day ${cd.dayNum}`]||[]).forEach(it=>{html+=`<div class="list-item"><div><b>${it.name}</b><br><small>${it.cat}</small></div><div><b>Rs ${it.amount}</b></div></div>`;}); delete grouped[`Day ${cd.dayNum}`];}); Object.keys(grouped).sort((a,b)=>parseInt(b.split(' ')[1])-parseInt(a.split(' ')[1])).forEach(k=>{let tot=grouped[k].reduce((s,i)=>s+Number(i.amount),0); let isActive = parseInt(k.split(' ')[1])===activeDayNum; html+=`<div class="day-group" style="${isActive?'background:#8A9A7B;color:white':''}"><div><b>${k} ${isActive?'(ACTIVE)':''}</b><br><small>Day Total: Rs ${tot}</small></div><span>Rs ${tot}</span></div>`; grouped[k].forEach(it=>{html+=`<div class="list-item"><div><b>${it.name}</b><br><small>${it.cat}</small></div><div><b>Rs ${it.amount}</b> <small onclick="del(${it.id})" style="color:#C9A0A0;cursor:pointer">Delete</small></div></div>`;});});} document.getElementById('kharchaList').innerHTML=html;}
 function del(id){list=list.filter(i=>i.id!=id);localStorage.setItem('rozanaList',JSON.stringify(list));updateUI();}
-function clearAll(){if(confirm('Sab data delete karke Day 1 se start karna hai?')){list=[];closedDays=[];activeDayNum=1;localStorage.clear();localStorage.setItem('activeDayNum','1');document.getElementById('totalBudget').value='';updateUI();}}
-function downloadPDF(){const {jsPDF}=window.jspdf; let doc=new jsPDF(); doc.text("Daily Expense Tracker By Z",10,15); let y=25; let spent=list.reduce((s,i)=>s+Number(i.amount),0); doc.text(`Budget: ${budget} | Total Spent: ${spent} | Balance: ${budget-spent}`,10,y); y+=10; closedDays.slice().reverse().forEach(cd=>{doc.text(`${cd.date} - Total: ${cd.total} - Balance: ${cd.balanceLeft}`,10,y); y+=7;}); list.forEach(it=>{if(y>270){doc.addPage(); y=20;} doc.text(`Day ${it.dayNum} - ${it.name} : Rs ${it.amount}`,10,y); y+=6;}); doc.save("Tracker.pdf");}
-updateUI();
+function clearAll(){if(confirm('Clear all?')){list=[];closedDays=[];activeDayNum=1;localStorage.removeItem('rozanaList');localStorage.removeItem('closedDays');localStorage.setItem('activeDayNum','1');updateUI();}}
+function downloadPDF(){const {jsPDF}=window.jspdf; let doc=new jsPDF(); doc.text("Daily Expense Tracker By Z",10,15); let y=25; let spent=list.reduce((s,i)=>s+Number(i.amount),0); doc.text(`Budget: ${budget} | Spent: ${spent} | Balance: ${budget-spent}`,10,y); y+=10; closedDays.forEach(cd=>{doc.text(`${cd.date} - Total: ${cd.total} - Balance: ${cd.balanceLeft}`,10,y); y+=7;}); list.forEach(it=>{if(y>270){doc.addPage(); y=20;} doc.text(`Day ${it.dayNum} - ${it.name}: Rs ${it.amount}`,10,y); y+=6;}); doc.save("Tracker.pdf");}
+updateUI(); setTimeout(()=>{const w=document.getElementById('welcome'); if(w) w.style.display='none'},3200);
 </script>
 </body>
 </html>
